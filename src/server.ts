@@ -1,14 +1,14 @@
-import app from "./app.js";
 import http from "http";
+import app from "./app";
+import connectDatabase from "./config/db.config";
 
-const PORT=8080;
+const PORT = 8080;
+const DB_URI='mongodb://localhost:27017/dbname';
 
-//*connect database
+connectDatabase(DB_URI);
 
-//*http server
 const server=http.createServer(app);
 
-//*listen
-server.listen(PORT,()=>{
-    console.log("server is runnig at http://localhost{PORT}");
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });
