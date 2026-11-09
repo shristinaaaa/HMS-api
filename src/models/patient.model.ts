@@ -1,64 +1,40 @@
-import mongoose, { Document } from "mongoose"
-import { IImage } from "../types/global.types";
-import imageschema from "./image.model";
+// patient.model.ts
 
-enum Role{
-    PATIENT="Patient",
-    ADMIN="Admin",
+import mongoose, { Document } from "mongoose";
+
+interface IPatient extends Document {
+    userId: mongoose.Types.ObjectId;
+    date_of_birth?: Date;
+    gender?: string;
+    blood_group?: string;
+    address?: string;
+    emergency_contact?: string;
 }
 
-interface Ipatient extends Document{
-    fullname:string;
-    email:string;
-    password:string;
-    role:Role;
-    profile_image?:IImage;
-    phone?:string;
-    is_active:boolean;
-    createdAt:Date;
-    updatedAt:Date;
-}
+const patientSchema = new mongoose.Schema<IPatient>({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",//connects patients collection to the corresponding document in users collection,patient collection ma j userId hunxa users collection ma ni tei Id hunxa
+        required: true,
+        unique: true,
+    },
+    date_of_birth: {
+        type: Date,
+    },
+    gender: {
+        type: String,
+    },
+    blood_group: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
+    emergency_contact: {
+        type: String,
+    },
+}, { timestamps: true });
 
-const patientSchema=new mongoose.Schema<Ipatient>({
-    fullname:{
-        type:String,
-        required:[true,"fullname is required"],
-        minlength:3,
-        trim:true,
-    },
-    email:{
-        type:String,
-        required:[true,"email is required"],
-        unique:true,
-        lowercase:true,
-        trim:true,
-    },
-    password:{
-        type:String,
-        required:[true,"password is required"],
-    },
-    role:{
-        type:String,
-        enum:Object.values(Role),
-        default:Role.PATIENT,
-    },
-    profile_image:{
-        type: imageschema,
-        default: null,
-    },
-    phone:{
-        type:String,
-        minlength:10,
-        maxlength:15,
-        default:null,
-    },
-    is_active:{
-        type:Boolean,
-        default:true,
-    }
-    
-},{timestamps:true});
+const Patient = mongoose.model<IPatient>("Patient", patientSchema);
 
-const Patient= mongoose.model<Ipatient>("Patient",patientSchema);
-
-export default Patient
+export default Patient;

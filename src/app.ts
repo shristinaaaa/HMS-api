@@ -2,9 +2,15 @@
 import express, { NextFunction, Request, Response } from "express";
 import errorHandler from "./middlewares/errorHandler.middleware";
 
+//*importing routes
+import authRoutes from './routes/auth.routes';
+
 const app = express();
 
 app.use(express.json({limit:'10mb'}));
+
+//*using routes
+app.use("/api/auth",authRoutes);
 
 // Test route
 app.get("/", (req, res) => {

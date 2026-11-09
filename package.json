@@ -9,6 +9,7 @@
     "start": "node build/server.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "express": "^5.0.0",
     "mongoose": "^9.12.0"
   },
