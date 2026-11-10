@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 //path not found middleware
 app.use((req:Request,res:Response,next:NextFunction)=>{
-    const message='cant use ${req.method} on ${req.path}';
+    const message = `cant use ${req.method} on ${req.path}`;
     const error:any = new Error(message); //js ko Error constructor use garera error banayem 
     error.statusCode=404;
     error.status='fail';

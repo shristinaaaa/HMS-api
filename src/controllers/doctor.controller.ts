@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Doctor from "../models/doctor.model";
+import sendResponse from "../utils/sendresponse.utils";
+import AppError from "../utils/appError.utils";
 
 export const getAllDoctors = async (
     req: Request,
@@ -10,10 +12,14 @@ export const getAllDoctors = async (
         const doctors = await Doctor.find()
             .populate("userId");
 
-        res.status(200).json({
-            message: "Doctors fetched successfully",
-            success: true,
-            data: doctors
+        if(!doctors){
+            throw new AppError("User is not in Database",404)
+        }    
+
+        sendResponse(res,{
+            message:"doctor's data fetched successfully",
+            data:doctors,
+            statusCode:201,
         });
 
     } catch (error) {
