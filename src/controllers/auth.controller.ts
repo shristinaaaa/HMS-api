@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/user.model";
-import { hashPassword } from "../utils/bcrypt.utils";
+import { comparePassword, hashPassword } from "../utils/bcrypt.utils";
 import AppError from "../utils/appError.utils";
 import sendResponse from "../utils/sendresponse.utils";
 
@@ -53,6 +53,45 @@ export const register=async(req:Request,res:Response, next:NextFunction)=>{
 
 
 //*login
+export const login =async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const{email,password}=req.body;
+        if(!email){
+            throw new AppError("Email is required",400);
+        }
+        if(!password){
+            throw new AppError("password is require",400);
+        }
+
+    //*find user
+     const user=await User.findOne({email});
+
+     if(!user) throw new AppError("Credentials dont match in our db",400);
+
+     //*compare pw
+     const isPasswordMatched=comparePassword(password,user.password);//userle enter gareko pw,db ma stored vako pw
+
+     if(!isPasswordMatched)
+        throw new AppError("password doesn't match",400);
+     
+     const{password:_, ...rest}=user.toObject();
+
+     //*send success response
+     sendResponse(res,{
+        message:"Login Success!",
+        data:rest,
+        statusCode:201,
+     })
+
+     //todo:create jwt accesstoken
+
+
+
+    }catch(error){
+        next(error);
+    }
+}
+
 
 //*changepw
 

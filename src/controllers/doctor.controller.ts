@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import Doctor from "../models/doctor.model";
 import sendResponse from "../utils/sendresponse.utils";
 import AppError from "../utils/appError.utils";
+import Doctor from "../models/doctor.model";
 
 export const getAllDoctors = async (
     req: Request,

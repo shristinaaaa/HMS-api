@@ -33,6 +33,7 @@ const userSchema=new mongoose.Schema<IUser>({
     password:{
         type:String,
         required:[true,"password is required"],
+        select:false,//pw is hidden from query result we can explicitly request it using .select("+password").
     },
     role:{
         type:String,

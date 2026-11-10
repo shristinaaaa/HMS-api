@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json({limit:'10mb'}));
 
 //*using routes
-app.use("/api/auth",authRoutes);
+app.use("/api/v1/ auth",authRoutes);
 
 // Test route
 app.get("/", (req, res) => {
