@@ -1,14 +1,21 @@
-import http from "http";
 import app from "./app";
 import connectDatabase from "./config/db.config";
+import ENV_CONFIG from "./config/env.config";
 
-const PORT = 8080;
-const DB_URI='mongodb://localhost:27017/hms';
+const PORT = ENV_CONFIG.PORT;
 
-connectDatabase(DB_URI);
+const startServer = async () => {
+    try {
+        await connectDatabase();
 
-const server=http.createServer(app);
+        app.listen(PORT, () => {
+            console.log(`Server running at http://localhost:${PORT}`);
+        });
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
+    } catch (error) {
+        console.log("Server failed to start:", error);
+        process.exit(1);
+    }
+};
+
+startServer();

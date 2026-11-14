@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import ENV_CONFIG from "../config/env.config";
 
 
 const errorHandler=(error:any,_:Request,res:Response,__:NextFunction)=>{
@@ -12,7 +13,8 @@ const errorHandler=(error:any,_:Request,res:Response,__:NextFunction)=>{
         status,
         success,
         data:null, 
-        stack:error?.stack??null,
+        stack:ENV_CONFIG.NODE_ENV==="development" ? error?.stack : null,
+        details:error?.details??null,
     });
 };
 export default errorHandler
