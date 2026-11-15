@@ -1,4 +1,3 @@
-// patient.model.ts
 
 import mongoose, { Document } from "mongoose";
 
@@ -14,25 +13,31 @@ interface IPatient extends Document {
 const patientSchema = new mongoose.Schema<IPatient>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",//connects patients collection to the corresponding document in users collection,patient collection ma j userId hunxa users collection ma ni tei Id hunxa
+        ref: "User",
         required: true,
         unique: true,
     },
+
     date_of_birth: {
         type: Date,
     },
+
     gender: {
         type: String,
     },
+
     blood_group: {
         type: String,
     },
+
     address: {
         type: String,
     },
+
     emergency_contact: {
         type: String,
     },
+
 }, { timestamps: true });
 
 const Patient = mongoose.model<IPatient>("Patient", patientSchema);

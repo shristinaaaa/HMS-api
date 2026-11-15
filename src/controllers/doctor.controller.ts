@@ -1,28 +1,40 @@
-import { NextFunction, Request, Response } from "express";
-import sendResponse from "../utils/sendresponse.utils";
-import AppError from "../utils/appError.utils";
+
+import { Request, Response, NextFunction } from "express";
 import Doctor from "../models/doctor.model";
+import AppError from "../utils/appError.utils";
+import sendResponse from "../utils/sendresponse.utils";
+import { catchasync } from "../utils/catchasync.utils";
 
-export const getAllDoctors = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        const doctors = await Doctor.find()
-            .populate("userId");
 
-        if(!doctors){
-            throw new AppError("User is not in Database",404)
-        }    
+//* APPROVE DOCTOR
 
-        sendResponse(res,{
-            message:"doctor's data fetched successfully",
-            data:doctors,
-            statusCode:201,
+export const approveDoctor = catchasync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const { id } = req.params;
+
+        //* find doctor and approve
+
+        const doctor = await Doctor.findByIdAndUpdate(
+            id,
+            {
+                is_approved: true,
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        ).populate("userId", "full_name email phone");
+
+        if (!doctor) {
+            throw new AppError("Doctor not found", 404);
+        }
+
+        sendResponse(res, {
+            message: "Doctor approved successfully!",
+            data: doctor,
+            statusCode: 200,
         });
 
-    } catch (error) {
-        next(error);
     }
-};
+);
