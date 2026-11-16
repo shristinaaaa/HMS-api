@@ -10,11 +10,13 @@ import {
 } from "../controllers/patient.controller";
 import { validate } from "../middlewares/validator.middleware";
 import { updatepatientvalidatorschema } from "../validators/patient.validator";
+import multerFileUploader from "../middlewares/multer.middleware";
 
 const router = Router();
+const upload= multerFileUploader();
 
 // CREATE
-router.post("/", createPatient);
+router.post("/", upload.single("image"), createPatient);
 
 // READ ALL
 router.get("/", getAllPatients);

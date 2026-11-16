@@ -15,6 +15,7 @@ import ENV_CONFIG from "../config/env.config";
 import { Role } from "../types/enum.types";
 
 
+
 //* REGISTER
 
 export const register = catchasync(
@@ -42,6 +43,7 @@ export const register = catchasync(
 
         } = req.body;
 
+        const file=req.file;
 
         //* check required fields
 
@@ -111,9 +113,18 @@ export const register = catchasync(
             email,
             phone,
             password: hash,
-            role: userRole,
+            role: userRole
         });
 
+
+        //*upload profileimage
+
+        if (file) {
+        user.profile_image = {
+        path: file.path,
+        public_id: file.filename
+         };
+        }
 
         //* save user
 

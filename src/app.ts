@@ -6,6 +6,7 @@ import AppError from "./utils/appError.utils";
 const app = express();
 
 app.use(express.json({limit:'10mb'}));
+app.use("/api/v1/uploads",express.static("uploads"));//makes the uploads folder publicly accessible,uploads bhitra subfolders lai ni yei line le kaam garxa
 
 //*importing route
 import routes from './routes';
@@ -17,7 +18,7 @@ app.get("/", (req, res) => {
         status:'success',
         success:'true',
         data:null,
-    })
+    });
 });
 
 //using routes
