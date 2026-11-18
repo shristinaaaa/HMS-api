@@ -1,22 +1,32 @@
-import express, { Request } from "express"
+
+import express from "express";
 import { login, register } from "../controllers/auth.controller";
 import { validate } from "../middlewares/validator.middleware";
-import { loginvalidatorschema, registervalidatorschema } from "../validators/auth.validator";
+import {
+    loginvalidatorschema,
+    registervalidatorschema
+} from "../validators/auth.validator";
 import multerFileUploader from "../middlewares/multer.middleware";
- 
-const router=express.Router();
 
-const upload =multerFileUploader();
+const router = express.Router();
 
-//*register user
+const upload = multerFileUploader();
 
-router.post("/register",upload.single("profile_image"),validate(registervalidatorschema),register);
+//* register user
+router.post(
+    "/register",
+    upload.single("profile_image"),
+    validate(registervalidatorschema),
+    register
+);
 
-//*login
+//* login
+router.post(
+    "/login",
+    validate(loginvalidatorschema),
+    login
+);
 
-router.post("/login",validate(loginvalidatorschema),login);
+//* change Pw
 
-//*change Pw
-
-
-export default router
+export default router;

@@ -11,12 +11,14 @@ const ENV_CONFIG={
 
 
     //*cookie
-    COOKIE_EXPIRES_IN:Number(process.env.COOKIE_EXPIRES_IN)
+    COOKIE_EXPIRES_IN:Number(process.env.COOKIE_EXPIRES_IN),
    
     //*nodemailer
 
     //*cloudinary
-
+    CLOUDINARY_CLOUD_NAME:process.env.CLOUDINARY_CLOUD_NAME!!,
+    CLOUDINARY_API_KEY:process.env.CLOUDINARY_API_KEY!!,
+    CLOUDINARY_API_SECRET:process.env.CLOUDINARY_API_SECRET!!,
 }
 
 export default ENV_CONFIG;

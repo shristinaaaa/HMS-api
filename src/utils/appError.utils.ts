@@ -1,5 +1,5 @@
 //AppError class banauna using predefined class Error
-
+//standard error object banauna jun error handler middleware ma janxa
 
 class AppError extends Error {
     public status: "error" | "fail";

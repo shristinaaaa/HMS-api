@@ -13,6 +13,7 @@ import { generateJwtToken } from "../utils/jwt.utils";
 import ENV_CONFIG from "../config/env.config";
 
 import { Role } from "../types/enum.types";
+import { uploadFileToCloudinary } from "../utils/cloudinary.utils";
 
 
 
@@ -120,9 +121,12 @@ export const register = catchasync(
         //*upload profileimage
 
         if (file) {
+
+        const {path,public_id}=await uploadFileToCloudinary(file,"/profileimg");
+
         user.profile_image = {
-        path: file.path,
-        public_id: file.filename
+        path,
+        public_id
          };
         }
 

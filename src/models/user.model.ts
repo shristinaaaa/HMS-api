@@ -9,7 +9,10 @@ interface IUser extends Document {
     email: string;
     password: string;
     role: Role;
-    profile_image?: IImage;
+    profile_image?:{
+        path:string;
+        public_id:string;
+    };
     phone?: string;
     is_active: boolean;
     createdAt: Date;
@@ -45,7 +48,16 @@ const userSchema = new mongoose.Schema<IUser>({
     },
 
     profile_image: {
-        type: imageschema,
+        type:{
+            path:{
+                type:String,
+                required:true,
+            },
+            public_id:{
+                type:String,
+                required:true,
+            },
+        },
         default: null,
     },
 
