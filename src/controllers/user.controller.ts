@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import AppError from "../utils/appError.utils";
 import sendResponse from "../utils/sendresponse.utils";
 import { catchasync } from "../utils/catchasync.utils";
+import { deleteFileFromCloudinary, uploadFileToCloudinary } from "../utils/cloudinary.utils";
 
 
 //* GET ALL USERS
@@ -53,31 +54,44 @@ export const updateUser = catchasync(
 
         const { id } = req.params;
 
-        const {
-            full_name,
-            email,
-            phone,
-            profile_image,
-        } = req.body;
-
-        //* find user and update
-        const user = await User.findByIdAndUpdate(
-            id,
-            {
-                full_name,
-                email,
-                phone,
-                profile_image,
-            },
-            {
-                new: true,
-                runValidators: true,
-            }
-        ).select("-password");
+        //* find user by ID
+        const user = await User.findById(id);
 
         if (!user) {
             throw new AppError("User not found", 404);
         }
+
+        //* upload new image
+        const file = req.file;
+
+        if (file) {
+
+            const { path, public_id } =
+                await uploadFileToCloudinary(file);
+
+            //* delete old image
+            if (user.profile_image?.public_id) {
+                await deleteFileFromCloudinary(
+                    user.profile_image.public_id
+                );
+            }
+
+            //* replace old image with new image
+            user.profile_image = {
+                path,
+                public_id
+            };
+        }
+
+        //* update other user fields (only allowed fields)
+        const { full_name, email, phone } = req.body;
+
+        if (full_name !== undefined) user.full_name = full_name;
+        if (email !== undefined) user.email = email;
+        if (phone !== undefined) user.phone = phone;
+
+        //* save updated user
+        await user.save();
 
         sendResponse(res, {
             message: "User updated successfully!",
@@ -86,6 +100,7 @@ export const updateUser = catchasync(
         });
     }
 );
+
 
 
 //* DELETE USER
