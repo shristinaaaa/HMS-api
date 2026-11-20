@@ -1,3 +1,4 @@
+//to send error as http response
 import { NextFunction, Request, Response } from "express";
 import ENV_CONFIG from "../config/env.config";
 

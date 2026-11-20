@@ -5,6 +5,7 @@ import AppError from "../utils/appError.utils";
 import sendResponse from "../utils/sendresponse.utils";
 import { catchasync } from "../utils/catchasync.utils";
 import { deleteFileFromCloudinary, uploadFileToCloudinary } from "../utils/cloudinary.utils";
+import Patient from "../models/patient.model";
 
 
 //* GET ALL USERS
@@ -102,7 +103,6 @@ export const updateUser = catchasync(
 );
 
 
-
 //* DELETE USER
 
 export const deleteUser = catchasync(
@@ -110,15 +110,21 @@ export const deleteUser = catchasync(
 
         const { id } = req.params;
 
-        //* find and delete user
-        const user = await User.findByIdAndDelete(id);
+        //* find user
+        const user = await User.findById(id);
 
         if (!user) {
             throw new AppError("User not found", 404);
         }
 
+        //* delete associated patient profile
+        await Patient.deleteOne({ userId: id });
+
+        //* delete user
+        await User.findByIdAndDelete(id);
+
         sendResponse(res, {
-            message: "User deleted successfully!",
+            message: "User and associated patient profile deleted successfully!",
             data: null,
             statusCode: 200,
         });

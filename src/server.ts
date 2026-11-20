@@ -8,7 +8,7 @@ const startServer = async () => {
     try {
         await connectDatabase();
 
-        app.listen(PORT, () => {
+        app.listen(PORT, () => { //.listen creates an underlying HTTP server and starts listening for incoming requests on the specified port.
             console.log(`Server running at http://localhost:${PORT}`);
         });
 
